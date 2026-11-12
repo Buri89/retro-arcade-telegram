@@ -10,7 +10,7 @@
 *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 14px;background:#090b1a;color:#f5f5ff;font-family:Arial,sans-serif;text-align:center;background-image:radial-gradient(#252a52 1px,transparent 1px);background-size:18px 18px}
 h1{color:#39f5d0;text-shadow:0 0 12px #39f5d0;letter-spacing:3px;font-size:30px;margin:18px 0 6px}.sub{color:#aab0d5;margin-bottom:24px}.panel{max-width:480px;margin:auto;background:#12162b;border:1px solid #39416d;border-radius:18px;padding:18px;box-shadow:0 0 24px #141c44}
 .games{display:grid;grid-template-columns:1fr 1fr;gap:12px}.game{background:#1c2342;border:1px solid #59618f;border-radius:12px;color:white;padding:18px 8px;font-size:16px;font-weight:bold;min-height:84px}.game span{display:block;font-size:27px;margin-bottom:8px}
-button{border:0;border-radius:12px;background:#39f5d0;color:#08121a;font-weight:900;padding:14px 18px;font-size:17px;margin:6px;box-shadow:0 4px 0 #159d8a;touch-action: manipulation}button:active{transform:translateY(3px);box-shadow:0 1px 0 #159d8a}#gameArea,#tankArea{display:none}canvas{background:#050812;border:2px solid #39f5d0;border-radius:8px;width:min(100%,420px);height:auto;touch-action:none;display:block;margin:0 auto}#tankBoard{width:100%;max-width:520px;border:3px solid #39f5d0;box-shadow:0 0 20px #173e50;image-rendering:pixelated}#score{color:#39f5d0;font-weight:bold;margin:12px}#controls{display:grid;grid-template-columns:repeat(3,minmax(76px,92px));justify-content:center;gap:10px;margin:18px auto;max-width:300px;touch-action:none}#controls button{margin:0;padding:10px;min-height:72px;font-size:30px;border-radius:18px;touch-action:none;user-select:none;-webkit-user-select:none}.small{color:#aab0d5;font-size:12px;margin-top:18px}.tankControls{display:grid;grid-template-columns:repeat(3,minmax(76px,96px));justify-content:center;gap:10px;margin:20px auto;max-width:320px;touch-action:none}.tankControls button{margin:0;min-height:76px;font-size:29px;border-radius:20px;padding:10px 5px;touch-action:none;user-select:none;-webkit-user-select:none}.tankActions{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}.tankActions button{min-width:140px;min-height:64px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none}.fireButton{background:#ffb347;box-shadow:0 4px 0 #bd6b19}.hint{font-size:13px;color:#aab0d5;margin:12px}
+button{border:0;border-radius:12px;background:#39f5d0;color:#08121a;font-weight:900;padding:14px 18px;font-size:17px;margin:6px;box-shadow:0 4px 0 #159d8a;touch-action: manipulation}button:active{transform:translateY(3px);box-shadow:0 1px 0 #159d8a}#gameArea,#tankArea{display:none}canvas{background:#050812;border:2px solid #39f5d0;border-radius:8px;width:min(100%,420px);height:auto;touch-action:none;display:block;margin:0 auto}#tankBoard{width:100%;max-width:520px;border:3px solid #39f5d0;box-shadow:0 0 20px #173e50;image-rendering:pixelated}#score{color:#39f5d0;font-weight:bold;margin:12px}#controls{display:grid;grid-template-columns:repeat(3,minmax(76px,96px));justify-content:center;gap:10px;margin:20px auto;max-width:320px;touch-action:none}#controls button{margin:0;padding:10px;min-height:76px;font-size:32px;border-radius:20px;touch-action:none;user-select:none;-webkit-user-select:none}.small{color:#aab0d5;font-size:12px;margin-top:18px}.tankControls{display:grid;grid-template-columns:repeat(3,minmax(76px,96px));justify-content:center;gap:10px;margin:20px auto;max-width:320px;touch-action:none}.tankControls button{margin:0;min-height:76px;font-size:29px;border-radius:20px;padding:10px 5px;touch-action:none;user-select:none;-webkit-user-select:none}.tankActions{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}.tankActions button{min-width:140px;min-height:64px;font-size:18px;touch-action:none;user-select:none;-webkit-user-select:none}.fireButton{background:#ffb347;box-shadow:0 4px 0 #bd6b19}.hint{font-size:13px;color:#aab0d5;margin:12px}
 </style>
 </head>
 <body>
@@ -24,7 +24,7 @@ button{border:0;border-radius:12px;background:#39f5d0;color:#08121a;font-weight:
 <button class="game" onclick="soon('RETRO JUMP')"><span>🕹️</span>RETRO JUMP</button>
 </div><div class="small">RETRO-ARCADE • VERSION 1.1</div></div>
 <div class="panel" id="gameArea"><h2>SNAKE</h2><div id="score">Punkte: 0</div><canvas id="board" width="320" height="320"></canvas>
-<div id="controls"><span></span><button onclick="turn(0,-1)">▲</button><span></span><button onclick="turn(-1,0)">◀</button><button onclick="turn(0,1)">▼</button><button onclick="turn(1,0)">▶</button></div>
+<div id="controls"><span></span><button class="snakeMoveBtn" data-dx="0" data-dy="-1">▲</button><span></span><button class="snakeMoveBtn" data-dx="-1" data-dy="0">◀</button><button class="snakeMoveBtn" data-dx="0" data-dy="1">▼</button><button class="snakeMoveBtn" data-dx="1" data-dy="0">▶</button></div>
 <button onclick="restart()">NEU STARTEN</button><button onclick="back()">MENÜ</button></div>
 <div class="panel" id="tankArea"><h2>🛡️ TANK BATTLE</h2><div id="tankScore">Punkte: 0 · Leben: 3</div><canvas id="tankBoard" width="320" height="320"></canvas>
 <div class="tankControls"><span></span><button class="moveBtn" data-dx="0" data-dy="-1">▲</button><span></span><button class="moveBtn" data-dx="-1" data-dy="0">◀</button><button class="moveBtn" data-dx="0" data-dy="1">▼</button><button class="moveBtn" data-dx="1" data-dy="0">▶</button></div>
@@ -34,10 +34,25 @@ const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand()}
 function soon(name){alert(name+' kommt bald!')}
 const canvas=document.getElementById('board'),ctx=canvas.getContext('2d');let snake,food,dir,next,score,timer,alive;
 function startSnake(){document.getElementById('menu').style.display='none';document.getElementById('tankArea').style.display='none';document.getElementById('gameArea').style.display='block';restart()}
-function back(){clearInterval(timer);stopTank();document.getElementById('gameArea').style.display='none';document.getElementById('tankArea').style.display='none';document.getElementById('menu').style.display='block'}
+function back(){clearInterval(timer);stopSnakeMove();stopTank();document.getElementById('gameArea').style.display='none';document.getElementById('tankArea').style.display='none';document.getElementById('menu').style.display='block'}
 function restart(){clearInterval(timer);snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];dir={x:1,y:0};next={x:1,y:0};score=0;alive=true;placeFood();draw();timer=setInterval(tick,140)}
 function placeFood(){food={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}}
 function turn(x,y){if(alive && !(x===-dir.x&&y===-dir.y))next={x,y}}
+let snakeMoveHold=null;
+function stopSnakeMove(){clearInterval(snakeMoveHold);snakeMoveHold=null}
+document.querySelectorAll(".snakeMoveBtn").forEach(btn=>{
+ const stop=()=>stopSnakeMove();
+ const begin=e=>{
+  e.preventDefault();
+  if(btn.setPointerCapture&&e.pointerId!==undefined)btn.setPointerCapture(e.pointerId);
+  const dx=Number(btn.dataset.dx),dy=Number(btn.dataset.dy);
+  turn(dx,dy);
+  stopSnakeMove();
+  snakeMoveHold=setInterval(()=>turn(dx,dy),140);
+ };
+ btn.addEventListener("pointerdown",begin);
+ ["pointerup","pointercancel","lostpointercapture"].forEach(ev=>btn.addEventListener(ev,stop));
+});
 function tick(){if(!alive)return;dir=next;let h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.y<0||h.x>=16||h.y>=16||snake.some(p=>p.x===h.x&&p.y===h.y)){alive=false;clearInterval(timer);draw();setTimeout(()=>alert('Game Over! Punkte: '+score),50);return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score+=10;placeFood()}else snake.pop();draw()}
 function draw(){ctx.fillStyle='#050812';ctx.fillRect(0,0,320,320);ctx.fillStyle='#ff4d8d';ctx.fillRect(food.x*20+3,food.y*20+3,14,14);snake.forEach((p,i)=>{ctx.fillStyle=i?'#22b99c':'#39f5d0';ctx.fillRect(p.x*20+2,p.y*20+2,16,16)});document.getElementById('score').textContent='Punkte: '+score}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowUp')turn(0,-1);if(e.key==='ArrowDown')turn(0,1);if(e.key==='ArrowLeft')turn(-1,0);if(e.key==='ArrowRight')turn(1,0);if(e.key===' '&&document.getElementById('tankArea').style.display==='block')fireTank()});
