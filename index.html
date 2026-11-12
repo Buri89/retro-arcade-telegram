@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#090b1a">
+<title>RETRO ARCADE 359</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 14px;background:#090b1a;color:#f5f5ff;font-family:Arial,sans-serif;text-align:center;background-image:radial-gradient(#252a52 1px,transparent 1px);background-size:18px 18px}
+h1{color:#39f5d0;text-shadow:0 0 12px #39f5d0;letter-spacing:3px;font-size:30px;margin:18px 0 6px}.sub{color:#aab0d5;margin-bottom:24px}.panel{max-width:480px;margin:auto;background:#12162b;border:1px solid #39416d;border-radius:18px;padding:18px;box-shadow:0 0 24px #141c44}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}.game{background:#1c2342;border:1px solid #59618f;border-radius:12px;color:white;padding:18px 8px;font-size:16px;font-weight:bold;min-height:84px}.game span{display:block;font-size:27px;margin-bottom:8px}
+button{border:0;border-radius:10px;background:#39f5d0;color:#08121a;font-weight:bold;padding:12px 18px;font-size:16px;margin:6px}#gameArea{display:none}canvas{background:#050812;border:2px solid #39f5d0;border-radius:8px;width:min(100%,320px);height:auto;touch-action:none}#score{color:#39f5d0;font-weight:bold;margin:12px}#controls{display:grid;grid-template-columns:repeat(3,58px);justify-content:center;gap:6px;margin:12px}#controls button{margin:0;padding:12px}.small{color:#aab0d5;font-size:12px;margin-top:18px}
+</style>
+</head>
+<body>
+<h1>RETRO ARCADE 359</h1><div class="sub">DEINE MINI-SPIELE-SAMMLUNG</div>
+<div class="panel" id="menu"><div class="games">
+<button class="game" onclick="startSnake()"><span>🐍</span>SNAKE</button>
+<button class="game" onclick="soon('TANK BATTLE')"><span>🛡️</span>TANK BATTLE</button>
+<button class="game" onclick="soon('SPACE SHOOTER')"><span>🚀</span>SPACE SHOOTER</button>
+<button class="game" onclick="soon('BRICK BREAKER')"><span>🧱</span>BRICK BREAKER</button>
+<button class="game" onclick="soon('PONG')"><span>🏓</span>PONG</button>
+<button class="game" onclick="soon('RETRO JUMP')"><span>🕹️</span>RETRO JUMP</button>
+</div><div class="small">RETRO-ARCADE • VERSION 1.0</div></div>
+<div class="panel" id="gameArea"><h2>SNAKE</h2><div id="score">Punkte: 0</div><canvas id="board" width="320" height="320"></canvas>
+<div id="controls"><span></span><button onclick="turn(0,-1)">▲</button><span></span><button onclick="turn(-1,0)">◀</button><button onclick="turn(0,1)">▼</button><button onclick="turn(1,0)">▶</button></div>
+<button onclick="restart()">NEU STARTEN</button><button onclick="back()">MENÜ</button></div>
+<script>
+const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand()}
+function soon(name){alert(name+' kommt bald!')}
+const canvas=document.getElementById('board'),ctx=canvas.getContext('2d');let snake,food,dir,next,score,timer,alive;
+function startSnake(){document.getElementById('menu').style.display='none';document.getElementById('gameArea').style.display='block';restart()}
+function back(){clearInterval(timer);document.getElementById('gameArea').style.display='none';document.getElementById('menu').style.display='block'}
+function restart(){clearInterval(timer);snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];dir={x:1,y:0};next={x:1,y:0};score=0;alive=true;placeFood();draw();timer=setInterval(tick,140)}
+function placeFood(){food={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}}
+function turn(x,y){if(x!==-dir.x||y!==-dir.y)next={x,y}}
+function tick(){if(!alive)return;dir=next;let h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.y<0||h.x>=16||h.y>=16||snake.some(p=>p.x===h.x&&p.y===h.y)){alive=false;clearInterval(timer);draw();setTimeout(()=>alert('Game Over! Punkte: '+score),50);return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score+=10;placeFood()}else snake.pop();draw()}
+function draw(){ctx.fillStyle='#050812';ctx.fillRect(0,0,320,320);ctx.fillStyle='#ff4d8d';ctx.fillRect(food.x*20+3,food.y*20+3,14,14);snake.forEach((p,i)=>{ctx.fillStyle=i?'#22b99c':'#39f5d0';ctx.fillRect(p.x*20+2,p.y*20+2,16,16)});document.getElementById('score').textContent='Punkte: '+score}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowUp')turn(0,-1);if(e.key==='ArrowDown')turn(0,1);if(e.key==='ArrowLeft')turn(-1,0);if(e.key==='ArrowRight')turn(1,0)})
+</script></body></html>
