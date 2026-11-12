@@ -19,9 +19,9 @@ button{border:0;border-radius:12px;background:#39f5d0;color:#08121a;font-weight:
 <button class="game" onclick="startSnake()"><span>🐍</span>SNAKE</button>
 <button class="game" onclick="startTank()"><span>🛡️</span>TANK BATTLE</button>
 <button class="game" onclick="startSpace()"><span>🚀</span>SPACE SHOOTER</button>
-<button class="game" onclick="soon('BRICK BREAKER')"><span>🧱</span>BRICK BREAKER</button>
-<button class="game" onclick="soon('PONG')"><span>🏓</span>PONG</button>
-<button class="game" onclick="soon('RETRO JUMP')"><span>🕹️</span>RETRO JUMP</button>
+<button class="game" onclick="startExtra('BRICK BREAKER')"><span>🧱</span>BRICK BREAKER</button>
+<button class="game" onclick="startExtra('PONG')"><span>🏓</span>PONG</button>
+<button class="game" onclick="startExtra('RETRO JUMP')"><span>🕹️</span>RETRO JUMP</button>
 </div><div class="small">RETRO-ARCADE • VERSION 1.2</div><button id="soundToggle" onclick="toggleSound()">🔊 TON: AN</button></div>
 <div class="panel" id="gameArea"><h2>SNAKE</h2><div id="score">Punkte: 0</div><canvas id="board" width="320" height="320"></canvas>
 <div id="controls"><span></span><button class="snakeMoveBtn" data-dx="0" data-dy="-1">▲</button><span></span><button class="snakeMoveBtn" data-dx="-1" data-dy="0">◀</button><button class="snakeMoveBtn" data-dx="0" data-dy="1">▼</button><button class="snakeMoveBtn" data-dx="1" data-dy="0">▶</button></div>
@@ -29,6 +29,14 @@ button{border:0;border-radius:12px;background:#39f5d0;color:#08121a;font-weight:
 <div class="panel" id="tankArea"><h2>🛡️ TANK BATTLE</h2><div id="tankScore">Punkte: 0 · Leben: 3 · Welle: 1</div><canvas id="tankBoard" width="320" height="320"></canvas>
 <div class="tankControls"><span></span><button class="moveBtn" data-dx="0" data-dy="-1">▲</button><span></span><button class="moveBtn" data-dx="-1" data-dy="0">◀</button><button class="moveBtn" data-dx="0" data-dy="1">▼</button><button class="moveBtn" data-dx="1" data-dy="0">▶</button></div>
 <div class="tankActions"><button class="fireButton" id="fireHold">💥 FEUER</button><button onclick="restartTank()">↻ NEU STARTEN</button><button onclick="back()">MENÜ</button></div><div class="hint">Pfeil gedrückt halten zum Fahren · FEUER gedrückt halten zum Schießen</div></div>
+
+<div class="panel" id="spaceArea"><h2>🚀 SPACE SHOOTER</h2><div id="spaceScore">Punkte: 0 · Leben: 3</div><canvas id="spaceBoard" width="320" height="420"></canvas>
+<div class="spaceControls"><button class="spaceMove" data-dir="-1">◀</button><button class="fireButton" id="spaceFire">🔥 FEUER</button><button class="spaceMove" data-dir="1">▶</button></div>
+<button onclick="restartSpace()">↻ NEU STARTEN</button><button onclick="back()">MENÜ</button><div class="hint">Bewegen und FEUER gedrückt halten</div></div>
+<div class="panel" id="extraArea"><h2 id="extraTitle">ARCADE</h2><div id="extraScore">Punkte: 0</div><canvas id="extraBoard" width="320" height="420"></canvas>
+<div class="spaceControls"><button id="extraLeft">◀</button><button id="extraAction" class="fireButton">AKTION</button><button id="extraRight">▶</button></div>
+<button onclick="restartExtra()">↻ NEU STARTEN</button><button onclick="back()">MENÜ</button><div class="hint" id="extraHint">Steuerung über die Tasten oder direkt auf dem Spielfeld</div></div>
+
 <script>
 const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand()}
 let audioCtx=null,soundOn=true;
@@ -37,7 +45,7 @@ function beep(freq=440,duration=.07,type='square'){if(!soundOn)return;try{const 
 function soon(name){alert(name+' kommt bald!')}
 const canvas=document.getElementById('board'),ctx=canvas.getContext('2d');let snake,food,dir,next,score,timer,alive;
 function startSnake(){document.getElementById('menu').style.display='none';document.getElementById('tankArea').style.display='none';document.getElementById('gameArea').style.display='block';restart()}
-function back(){clearInterval(timer);stopSnakeMove();stopTank();stopSpace();stopExtra();document.getElementById('gameArea').style.display='none';document.getElementById('tankArea').style.display='none';document.getElementById('menu').style.display='block'}
+function back(){clearInterval(timer);stopSnakeMove();stopTank();stopSpace();stopExtra();document.getElementById('gameArea').style.display='none';document.getElementById('tankArea').style.display='none';document.getElementById('spaceArea').style.display='none';document.getElementById('extraArea').style.display='none';document.getElementById('menu').style.display='block'}
 function restart(){clearInterval(timer);snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];dir={x:1,y:0};next={x:1,y:0};score=0;alive=true;placeFood();draw();timer=setInterval(tick,140)}
 function placeFood(){food={x:Math.floor(Math.random()*16),y:Math.floor(Math.random()*16)}}
 function turn(x,y){if(alive && !(x===-dir.x&&y===-dir.y))next={x,y}}
@@ -61,7 +69,7 @@ function draw(){ctx.fillStyle='#050812';ctx.fillRect(0,0,320,320);ctx.fillStyle=
 document.addEventListener('keydown',e=>{if(e.key==='ArrowUp')turn(0,-1);if(e.key==='ArrowDown')turn(0,1);if(e.key==='ArrowLeft')turn(-1,0);if(e.key==='ArrowRight')turn(1,0);if(e.key===' '&&document.getElementById('tankArea').style.display==='block')fireTank()});
 // TANK BATTLE
 const tc=document.getElementById('tankBoard'),tctx=tc.getContext('2d');let player,enemies,bullets,blocks,tankPoints,lives,tankTimer,enemyTimer,tankAlive,playerDir,moveHold=null,fireHoldTimer=null,explosions=[],wave=1,hitUntil=0,lastShot=0,bestTank=0;
-function startTank(){document.getElementById('menu').style.display='none';document.getElementById('gameArea').style.display='none';document.getElementById('tankArea').style.display='block';restartTank()}
+function startTank(){document.getElementById('menu').style.display='none';document.getElementById('gameArea').style.display='none';document.getElementById('spaceArea').style.display='none';document.getElementById('extraArea').style.display='none';document.getElementById('tankArea').style.display='block';restartTank()}
 function restartTank(){stopTank();player={x:7,y:13};playerDir={x:0,y:-1};enemies=[];bullets=[];explosions=[];blocks=[{x:4,y:5},{x:5,y:5},{x:10,y:8},{x:11,y:8},{x:7,y:9},{x:2,y:10},{x:13,y:4}];tankPoints=0;lives=3;wave=1;hitUntil=0;lastShot=0;tankAlive=true;spawnEnemy();spawnEnemy();drawTank();tankTimer=setInterval(tankTick,90);enemyTimer=setInterval(enemyMove,620)}
 function stopTank(){clearInterval(tankTimer);clearInterval(enemyTimer);clearInterval(moveHold);clearInterval(fireHoldTimer);moveHold=null;fireHoldTimer=null}
 function spawnEnemy(){if(enemies.length<Math.min(3+wave,6)){let x=Math.floor(Math.random()*14)+1;for(let tries=0;tries<20&&(blocks.some(b=>b.x===x&&b.y===0)||enemies.some(e=>e.x===x&&e.y===0));tries++)x=Math.floor(Math.random()*14)+1;enemies.push({x,y:0,dir:1,hp:1})}}
