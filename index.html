@@ -96,7 +96,8 @@ function drawSpace(){sctx.fillStyle='#030611';sctx.fillRect(0,0,320,420);spaceSt
 document.querySelectorAll('.spaceMove').forEach(btn=>{const stop=()=>{clearInterval(spaceMoveTimer);spaceMoveTimer=null};btn.addEventListener('pointerdown',e=>{e.preventDefault();if(btn.setPointerCapture&&e.pointerId!==undefined)btn.setPointerCapture(e.pointerId);const d=Number(btn.dataset.dir);moveSpace(d);stop();spaceMoveTimer=setInterval(()=>moveSpace(d),75)});['pointerup','pointercancel','lostpointercapture'].forEach(ev=>btn.addEventListener(ev,stop))});
 const spaceFire=document.getElementById('spaceFire');const stopSpaceFire=()=>{clearInterval(spaceFireTimer);spaceFireTimer=null};spaceFire.addEventListener('pointerdown',e=>{e.preventDefault();if(spaceFire.setPointerCapture&&e.pointerId!==undefined)spaceFire.setPointerCapture(e.pointerId);fireSpace();stopSpaceFire();spaceFireTimer=setInterval(fireSpace,220)});['pointerup','pointercancel','lostpointercapture'].forEach(ev=>spaceFire.addEventListener(ev,stopSpaceFire));
 document.addEventListener('keydown',e=>{if(document.getElementById('spaceArea').style.display!=='block')return;if(e.key==='ArrowLeft')moveSpace(-1);if(e.key==='ArrowRight')moveSpace(1);if(e.key===' '){e.preventDefault();fireSpace()}});
-\n
+
+
 // BRICK BREAKER, PONG, RETRO JUMP
 const ec=document.getElementById('extraBoard'),ex=ec.getContext('2d');
 let extraMode='',extraTimer=null,extraScore=0,extraAlive=false,brickBall={},brickPaddle=130,brickRows=[],pongBall={},pongPlayer=130,pongCPU=130,jump={x:45,y:340,vy:0,on:true},jumpPlatforms=[],jumpKeys={};
@@ -120,4 +121,5 @@ document.getElementById('extraAction').addEventListener('pointerdown',e=>{e.prev
 ec.addEventListener('pointermove',e=>{if(!extraAlive)return;const r=ec.getBoundingClientRect(),x=(e.clientX-r.left)*320/r.width,y=(e.clientY-r.top)*420/r.height;if(extraMode==='BRICK BREAKER')brickPaddle=Math.max(0,Math.min(260,x-30));if(extraMode==='PONG')pongPlayer=Math.max(25,Math.min(345,y-35))});
 document.getElementById('extraLeft').addEventListener('pointerup',()=>jumpKeys.dir=0);document.getElementById('extraRight').addEventListener('pointerup',()=>jumpKeys.dir=0);
 document.querySelectorAll('.game').forEach((b,i)=>{if(i===3)b.onclick=()=>startExtra('BRICK BREAKER');if(i===4)b.onclick=()=>startExtra('PONG');if(i===5)b.onclick=()=>startExtra('RETRO JUMP')});
-\n</script></body></html>
+
+</script></body></html>
